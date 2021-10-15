@@ -1,0 +1,76 @@
+-- Get the team, cities and team name sorted by year formed from newest to oldest for team in major league.
+SELECT team_name team,
+      team_city cities,
+      yr_performed year,
+      league_name league
+FROM team
+WHERE league_name='MAJOR'
+ORDER BY yr_performed DESC;
+
+-- What major league team has minor league team in the same city.
+SELECT * FROM team 
+WHERE league_name= 'MAJOR' 
+AND team_id IN (SELECT team_id FROM team WHERE league_name='MINOR');
+
+/*Get a lists of team and their parent team based on the relationship in the team_rel table, in the form of
+  (replace values for the underlined text)
+ 'The parent_team_name is the Parent Team of the child_team_name'*/
+
+SELECT
+    'The ' || t1.team_name || ' is the parent of the ' || t2.team_name
+FROM
+    TEAM_REL TR
+    INNER JOIN TEAM T1 ON t1.team_id = TR.PARENT_ID
+    INNER JOIN TEAM T2 ON t2.team_id = tr.child_id
+
+
+/* Get a list of team and their medical trainer. If the team does not have a medical trainer then includes the team 
+    in the list with 'a blank value for the medical trainer'*/
+    
+ SELECT t1.team_id, 
+               t1.team_name team,
+               t2.fst_name||' '||t2.last_name coach_name,
+               DECODE(t2.coach_type, 'Medical Trainer', 'Medical Trainer', '') coach_type
+FROM team t1, coaches t2
+WHERE t1.team_id = t2.team_id;
+        
+/*  List the team in order from most championship won to least championship won. Includes all teams in
+   the results even they have not won a championship.*/
+   
+   SELECT DISTINCT t1.team_id,
+                  t1.team_name team,
+                  champ
+    FROM team t1,     
+  ( (SELECT team_id, MAX(champion_team) champ FROM champions GROUP BY team_id)
+   UNION
+   (SELECT team_id, MIN(champion_team) champ FROM champions GROUP BY team_id)) t2
+   WHERE t1.team_id = t2.team_id
+   ORDER BY champ DESC;
+   
+
+/* For the championship year recorded, what team has never play any championship game?*/
+
+SELECT DISTINCT team_name team  FROM team WHERE team_id NOT IN (SELECT team_id FROM champions) AND yr_performed='NULL' AND league_name='NULL';
+
+/*Get the list of Major Team who has most recently created their Minor League Team*/
+SELECT team_name team 
+FROM
+(SELECT DISTINCT team_name, league_name
+FROM team
+WHERE (league_name,yr_performed) IN (select league_name,max(yr_performed) from team group by league_name);
+
+
+/*Get the first and last name of the coach who has won the championship with more than one time*/
+
+SELECT  DISTINCT TRIM(SUBSTR(head_coach, 1, INSTR(head_coach,' ', 1, 1))) AS first_name,
+                TRIM(SUBSTR(head_coach, INSTR(head_coach,' ', 1, 1)+1)) AS first_name
+FROM champions t1,
+(SELECT team_id, COUNT(champion_team) 
+FROM champions GROUP BY team_id HAVING COUNT(champion_team) >1) t2
+WHERE t1.team_id = t2.team_id;
+
+or join with coach and get the first and last_name
+----------------------------------------------------------------------------------
+/*Get the firt name and last name of the coaches who never won a championship*/
+
+SELECT  fst_name, last_name FROM coaches WHERE team_id NOT IN (SELECT team_id FROM champions);
