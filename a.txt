@@ -35,7 +35,7 @@ FROM team t1, coaches t2
 WHERE t1.team_id = t2.team_id;
         
 /*  List the team in order from most championship won to least championship won. Includes all teams in
-   the results even they have not won a championship.*/
+   the results even they have not won a championship.*
    
    SELECT DISTINCT t1.team_id,
                   t1.team_name team,
