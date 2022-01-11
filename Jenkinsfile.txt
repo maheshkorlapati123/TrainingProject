@@ -1,0 +1,30 @@
+properties([pipelineTriggers([githubPush()])])
+ 
+pipeline {
+    /* specify nodes for executing */
+    agent {
+        label 'TestNode'
+    }
+ 
+    stages {
+        /* checkout repo */
+        stage('Checkout SCM') {
+            steps {
+                checkout([
+                 $class: 'GitSCM',
+                 branches: [[name: 'master']],
+                 userRemoteConfigs: [[
+                     url: 'git@github.com/maheshkorlapati123/TrainingProject',
+                    credentialsId: '',
+                 ]]
+                ])
+            }
+        }
+         stage('Do the deployment') {
+            steps {
+                echo ">> Run deploy applications "
+            }
+        }
+    }
+
+}
