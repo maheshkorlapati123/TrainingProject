@@ -12,7 +12,7 @@ SELECT * FROM team
 WHERE league_name= 'MAJOR' 
 AND team_id IN (SELECT team_id FROM team WHERE league_name='MINOR');
 
-/*Get a lists of team and their parent team based on the relationship in the team_rel table, in the form of
+/*Gets a lists of team and their parent team based on the relationship in the team_rel table, in the form of
   (replace values for the underlined text)
  'The parent_team_name is the Parent Team of the child_team_name'*/
 
