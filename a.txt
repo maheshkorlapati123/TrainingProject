@@ -71,6 +71,6 @@ WHERE t1.team_id = t2.team_id;
 
 or join with coach and get the first and last_name
 ----------------------------------------------------------------------------------
-/*Get the firt name and last name of the coaches who never won a championship*/
+/*Get theds firt name and last name of the coaches who never won a championship*/
 
 SELECT  fst_name, last_name FROM coaches WHERE team_id NOT IN (SELECT team_id FROM champions);
