@@ -24,7 +24,7 @@ FROM
     INNER JOIN TEAM T2 ON t2.team_id = tr.child_id
 
 
-/* Get a list of team and their medical trainer. If the team does not have a medical trainer then includes the team 
+/* Get a list of teams and their medical trainer. If the team does not have a medical trainer then includes the team 
     in the list with 'a blank value for the medical trainer'*/
     
  SELECT t1.team_id, 
