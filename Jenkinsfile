@@ -3,7 +3,7 @@ pipeline{
 	  stages{
 		stage("Git Checkout"){
 		  steps{
-				git credentialsId: 'githu', url: 'https://github.com/maheshkorlapati123/Master.git' 
+				git credentialsId: 'githu', url: 'https://github.com/maheshkorlapati123/TrainingProject.git' 
 			   }
 			  }
 		
